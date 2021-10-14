@@ -61,7 +61,11 @@ public class Account {
         return customer.getName() + " " + customer.getEmail();
     }
 
-    String getIbanDaysOverdrawn() {
+    String getIbanDaysOverdrawnString() {
         return "Account: IBAN: " + getIban() + ", Days Overdrawn: " + getDaysOverdrawn();
+    }
+
+    String getIbanMoneyString() {
+        return "Account: IBAN: " + getIban() + ", Money: " + getMoney();
     }
 }
