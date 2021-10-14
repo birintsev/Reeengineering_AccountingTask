@@ -1,15 +1,28 @@
+import lombok.Getter;
+import lombok.Setter;
+
 public class Account {
 
+    @Getter
+    @Setter
     private String iban;
 
+    @Getter
     private AccountType type;
 
+    @Getter
     private int daysOverdrawn;
 
+    @Getter
+    @Setter
     private double money;
 
+    @Getter
+    @Setter
     private String currency;
 
+    @Getter
+    @Setter
     private Customer customer;
 
     public Account(AccountType type, int daysOverdrawn) {
@@ -44,48 +57,7 @@ public class Account {
         }
     }
 
-
-    public int getDaysOverdrawn() {
-        return daysOverdrawn;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public AccountType getType() {
-        return type;
-    }
-
     public String printCustomer() {
         return customer.getName() + " " + customer.getEmail();
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 }
