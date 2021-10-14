@@ -83,10 +83,7 @@ public class Customer {
     }
 
     public String printCustomerDaysOverdrawn() {
-        String fullName = getFullName();
-
-        String accountDescription = "Account: IBAN: " + account.getIban() + ", Days Overdrawn: " + account.getDaysOverdrawn();
-        return fullName + accountDescription;
+        return getFullName() + account.getIbanDaysOverdrawn();
     }
 
     public String printCustomerMoney() {

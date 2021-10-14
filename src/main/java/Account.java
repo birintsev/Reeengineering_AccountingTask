@@ -60,4 +60,8 @@ public class Account {
     public String printCustomer() {
         return customer.getName() + " " + customer.getEmail();
     }
+
+    String getIbanDaysOverdrawn() {
+        return "Account: IBAN: " + getIban() + ", Days Overdrawn: " + getDaysOverdrawn();
+    }
 }
