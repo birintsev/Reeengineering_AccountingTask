@@ -1,71 +1,61 @@
-import lombok.Getter;
-import lombok.Setter;
+public interface Account {
 
-public class Account {
+    String getIban();
 
-    @Getter
-    @Setter
-    private String iban;
+    void setIban(String iban);
 
-    @Getter
-    private AccountType type;
+    double getMoney();
 
-    @Getter
-    private int daysOverdrawn;
+    void setMoney(double sum);
 
-    @Getter
-    @Setter
-    private double money;
+    int getDaysOverdrawn();
 
-    @Getter
-    @Setter
-    private String currency;
+    void setDaysOverdrawn(int daysOverdrawn);
 
-    @Getter
-    @Setter
-    private Customer customer;
+    double getOverdraftFee();
 
-    public Account(AccountType type, int daysOverdrawn) {
-        super();
-        this.type = type;
-        this.daysOverdrawn = daysOverdrawn;
-    }
+    double getOverdraftFeeDiscount();
 
-    public double bankcharge() {
-        double result = 4.5;
+    void setOverdraftFeeDiscount(double overdraftFeeDiscount);
 
-        result += overdraftCharge();
+    double getOverdraftFeeDiscountCoefficient();
 
-        return result;
-    }
+    void setOverdraftFeeDiscountCoefficient(double overdraftFeeDiscountCoefficient);
 
-    private double overdraftCharge() {
-        if (type == AccountType.PREMIUM) {
-            double result = 10;
-            if (getDaysOverdrawn() > 7)
-                result += (getDaysOverdrawn() - 7) * 1.0;
-            return result;
-        } else
-            return getDaysOverdrawn() * 1.75;
-    }
+    String getCurrency();
 
-    public double overdraftFee() {
-        if (type == AccountType.PREMIUM) {
-            return 0.10;
-        } else {
-            return 0.20;
+    void setCurrency(String currency);
+
+    Customer getCustomer();
+
+    void setCustomer(Customer customer);
+
+    double bankcharge();
+
+    String getAccountTypeName();
+
+    double overdraftCharge();
+
+    default void withdraw(double sum, String currency) {
+        if (!getCurrency().equals(currency)) {
+            throw new RuntimeException("Can't extract withdraw " + currency);
         }
+        setMoney(
+            getMoney() < 0
+            ? calculateMoneyAfterWithdrawCredit(sum)
+            : calculateMoneyAfterWithdraw(sum)
+        );
     }
 
-    public String printCustomer() {
-        return customer.getName() + " " + customer.getEmail();
+    default double calculateMoneyAfterWithdraw(double sum) {
+        return getMoney() - sum;
     }
 
-    String getIbanDaysOverdrawnString() {
-        return "Account: IBAN: " + getIban() + ", Days Overdrawn: " + getDaysOverdrawn();
-    }
-
-    String getIbanMoneyString() {
-        return "Account: IBAN: " + getIban() + ", Money: " + getMoney();
+    default double calculateMoneyAfterWithdrawCredit(double sum) {
+        return (getMoney() - sum)
+            - sum
+                * getOverdraftFee()
+                * getOverdraftFeeDiscount()
+                * getOverdraftFeeDiscountCoefficient();
     }
 }

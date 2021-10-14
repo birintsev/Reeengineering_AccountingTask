@@ -20,29 +20,12 @@ public abstract class Customer {
         this.account = account;
     }
 
-    public void withdraw(double sum, String currency) {
-        Account account = getAccount();
-        if (!account.getCurrency().equals(currency)) {
-            throw new RuntimeException("Can't extract withdraw " + currency);
-        }
-        account.setMoney(
-            account.getMoney() < 0
-            ? calculateAccountMoneyAfterWithdrawCredit(sum)
-            : calculateAccountMoneyAfterWithdraw(sum)
-        );
-    };
-
-    public String printCustomerAccount() {
+    public String getCustomerAccountString() {
         return "Account: IBAN: " + account.getIban() + ", Money: "
-                + account.getMoney() + ", Account type: " + account.getType();
+                + account.getMoney() + ", Account type: " + account.getAccountTypeName();
     }
 
-    protected double calculateAccountMoneyAfterWithdraw(double sum) {
-        return getAccount().getMoney() - sum;
-    }
-
-    protected double calculateAccountMoneyAfterWithdrawCredit(double sum) {
-        Account account = getAccount();
-        return (account.getMoney() - sum) - sum * account.overdraftFee();
+    public String getCustomerString() {
+        return getName() + " " + getEmail();
     }
 }
