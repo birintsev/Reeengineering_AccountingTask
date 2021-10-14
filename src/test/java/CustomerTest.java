@@ -71,14 +71,14 @@ public class CustomerTest {
 
     @Test
     public void testPrintCustomerDaysOverdrawn() throws Exception {
-        Customer customer = getPersonWithAccount(false);
-        assertThat(customer.printCustomerDaysOverdrawn(), is("danix dan Account: IBAN: RO023INGB434321431241, Days Overdrawn: 9"));
+        Person person = getPersonWithAccount(false);
+        assertThat(person.printCustomerDaysOverdrawn(), is("danix dan Account: IBAN: RO023INGB434321431241, Days Overdrawn: 9"));
     }
 
     @Test
     public void testPrintCustomerMoney() throws Exception {
-        Customer customer = getPersonWithAccount(false);
-        assertThat(customer.printCustomerMoney(), is("danix dan Account: IBAN: RO023INGB434321431241, Money: 34.0"));
+        Person person = getPersonWithAccount(false);
+        assertThat(person.printCustomerMoney(), is("danix dan Account: IBAN: RO023INGB434321431241, Money: 34.0"));
     }
 
     @Test
@@ -93,13 +93,13 @@ public class CustomerTest {
         assertThat(customer.printCustomerAccount(), is("Account: IBAN: RO023INGB434321431241, Money: 34.0, Account type: premium"));
     }
 
-    private Customer getPersonWithAccount(boolean premium) {
+    private Person getPersonWithAccount(boolean premium) {
         Account account = new Account(premium ? AccountType.PREMIUM : AccountType.NORMAL, 9);
-        Customer customer = getPersonCustomer(account);
+        Person person = getPersonCustomer(account);
         account.setIban("RO023INGB434321431241");
         account.setMoney(34.0);
         account.setCurrency("EUR");
-        return customer;
+        return person;
     }
 
     private Account getAccountByTypeAndMoney(boolean premium, double money) {
@@ -110,15 +110,16 @@ public class CustomerTest {
         return account;
     }
 
-    private Customer getPersonCustomer(Account account) {
-        Customer customer = new Customer("danix", "dan", "dan@mail.com", CustomerType.PERSON, account);
-        account.setCustomer(customer);
-        return customer;
+    private Person getPersonCustomer(Account account) {
+        Person person = new Person("dan@mail.com", account, "danix", "dan");
+        account.setCustomer(person);
+        return person;
     }
 
     private Customer getCompanyCustomer(Account account) {
-        Customer customer = new Customer("company", "company@mail.com", account, 0.50);
-        account.setCustomer(customer);
-        return customer;
+        // Customer customer = new Customer("company", "company@mail.com", account, 0.50);
+        Company company = new Company("company", "company@mail.com", account, 0.50);
+        account.setCustomer(company);
+        return company;
     }
 }
