@@ -1,8 +1,19 @@
+import lombok.Getter;
+import lombok.Setter;
+
 public class Customer {
 
+    @Getter
+    @Setter
     private String name;
-    private String surname;
+    @Getter
+    @Setter
     private String email;
+
+    private String surname;
+
+    @Getter
+    @Setter
     private CustomerType customerType;
     private Account account;
     private double companyOverdraftDiscount = 1;
@@ -69,30 +80,6 @@ public class Customer {
                     break;
             }
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public CustomerType getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
     }
 
     public String printCustomerDaysOverdrawn() {
