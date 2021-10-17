@@ -9,6 +9,7 @@ public class Person extends Customer {
 
     public Person(String email, Account account, String name, String surname) {
         super(name, email, account);
+
         this.surname = surname;
     }
 

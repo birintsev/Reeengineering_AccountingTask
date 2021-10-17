@@ -7,7 +7,8 @@ public abstract class Account {
 
     private static double BASE_BANKCHARGE = 4.5;
 
-    private static int DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT = 1; // 1 means 100%
+    // 1 means 100%
+    private static int DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT = 1;
 
     private String iban;
 
@@ -26,7 +27,8 @@ public abstract class Account {
     private double overdraftFeeDiscountCoefficient;
 
     public Account() {
-        this.overdraftFeeDiscountCoefficient = DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT;
+        this.overdraftFeeDiscountCoefficient =
+            DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT;
     }
 
     public double bankcharge() {
@@ -36,10 +38,6 @@ public abstract class Account {
 
         return result;
     }
-
-    abstract String getAccountTypeName();
-
-    abstract double overdraftCharge();
 
     public void withdraw(double sum, String currency) {
         if (!getCurrency().equals(currency)) {
@@ -63,4 +61,8 @@ public abstract class Account {
                 * getOverdraftFeeDiscount()
                 * getOverdraftFeeDiscountCoefficient());
     }
+
+    protected abstract String getAccountTypeName();
+
+    protected abstract double overdraftCharge();
 }

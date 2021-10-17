@@ -11,7 +11,8 @@ public class NormalAccount extends Account {
 
     private static final int NORMAL_ACCOUNT_OVERDRAFT_FEE_DISCOUNT = 1;
 
-    private static final int NORMAL_ACCOUNT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT = 1;
+    private static final int NORMAL_ACCOUNT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT =
+        1;
 
     private static final int NO_DAYS_OVERDRAWN = 0;
 
