@@ -12,15 +12,7 @@ public class Person extends Customer {
         this.surname = surname;
     }
 
-    public String printCustomerDaysOverdrawn() { // TODO: find more relevant class for this method (or make it a static function)
-        return getFullName() + Account.getIbanDaysOverdrawnString(getAccount());
-    }
-
-    public String printCustomerMoney() { // TODO: find more relevant class for this method (or make it a static function)
-        return getFullName() + Account.getIbanMoneyString(getAccount());
-    }
-
-    private String getFullName() {
+    public String getFullName() {
         return getName() + " " + getSurname() + " ";
     }
 }

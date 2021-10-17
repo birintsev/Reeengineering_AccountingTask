@@ -29,14 +29,6 @@ public abstract class Account {
         this.overdraftFeeDiscountCoefficient = DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT;
     }
 
-    public static String getIbanDaysOverdrawnString(Account account) {
-        return "Account: IBAN: " + account.getIban() + ", Days Overdrawn: " + account.getDaysOverdrawn();
-    }
-
-    public static String getIbanMoneyString(Account account) {
-        return "Account: IBAN: " + account.getIban() + ", Money: " + account.getMoney();
-    }
-
     public double bankcharge() {
         double result = BASE_BANKCHARGE;
 
@@ -66,9 +58,9 @@ public abstract class Account {
 
     public double calculateMoneyAfterWithdrawCredit(double sum) {
         return (getMoney() - sum)
-            - sum
-            * getOverdraftFee()
-            * getOverdraftFeeDiscount()
-            * getOverdraftFeeDiscountCoefficient();
+            - (sum
+                * getOverdraftFee()
+                * getOverdraftFeeDiscount()
+                * getOverdraftFeeDiscountCoefficient());
     }
 }

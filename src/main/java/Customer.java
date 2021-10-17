@@ -2,12 +2,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 public abstract class Customer {
 
-    @Getter
     private String name;
 
-    @Getter
     @Setter
     private String email;
 
@@ -20,12 +19,8 @@ public abstract class Customer {
         this.account = account;
     }
 
-    public String getCustomerAccountString() {
-        return "Account: IBAN: " + account.getIban() + ", Money: "
-                + account.getMoney() + ", Account type: " + account.getAccountTypeName();
-    }
-
-    public String getCustomerString() {
+    @Override
+    public String toString() {
         return getName() + " " + getEmail();
     }
 }
