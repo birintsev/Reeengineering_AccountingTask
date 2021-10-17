@@ -1,9 +1,15 @@
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Currency;
 
 @Getter
 @Setter
 public abstract class Account {
+
+    private static final Currency DEFAULT_CURRENCY =
+        Currency.getInstance("EUR");
+
+    private static final double NO_MONEY = 0.0;
 
     private static double BASE_BANKCHARGE = 4.5;
 
@@ -12,11 +18,9 @@ public abstract class Account {
 
     private String iban;
 
-    private double money;
+    private Money balance;
 
     private int daysOverdrawn;
-
-    private String currency;
 
     private Customer customer;
 
@@ -27,8 +31,10 @@ public abstract class Account {
     private double overdraftFeeDiscountCoefficient;
 
     public Account() {
-        this.overdraftFeeDiscountCoefficient =
-            DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT;
+        setOverdraftFeeDiscountCoefficient(
+            DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT
+        );
+        setBalance(new Money(DEFAULT_CURRENCY, NO_MONEY));
     }
 
     public double bankcharge() {
@@ -46,20 +52,26 @@ public abstract class Account {
      * else {@link #calculateMoneyAfterWithdrawCredit additional fee is kept
      * from the operation}.
      *
-     * @param sum      the sum to be withdrawn.
-     * @param currency the currency which should be used in the transaction.
+     * @param     money money to be withdrawn from the {@link #balance balance}.
      *
-     * @see            #calculateMoneyAfterWithdraw
-     * @see            #calculateMoneyAfterWithdrawCredit
+     * @exception IllegalArgumentException
+     *                  if the currencies of the {@link #balance balance}
+     *                  and passed money are different.
+     *
+     * @see       #calculateMoneyAfterWithdraw
+     * @see       #calculateMoneyAfterWithdrawCredit
      * */
-    public void withdraw(double sum, String currency) {
-        if (!getCurrency().equals(currency)) {
-            throw new RuntimeException("Can't extract withdraw " + currency);
+    public void withdraw(Money money) {
+        if (!getBalance().getCurrency().equals(money.getCurrency())) {
+            throw new IllegalArgumentException(
+                "Can't extract withdraw "
+                    + money.getCurrency().getCurrencyCode()
+            );
         }
-        setMoney(
-            getMoney() < 0
-            ? calculateMoneyAfterWithdrawCredit(sum)
-            : calculateMoneyAfterWithdraw(sum)
+        getBalance().setMoney(
+            getBalance().getMoney() < 0
+            ? calculateMoneyAfterWithdrawCredit(money.getMoney())
+            : calculateMoneyAfterWithdraw(money.getMoney())
         );
     }
 
@@ -68,11 +80,11 @@ public abstract class Account {
     protected abstract double overdraftCharge();
 
     private double calculateMoneyAfterWithdraw(double sum) {
-        return getMoney() - sum;
+        return getBalance().getMoney() - sum;
     }
 
     private double calculateMoneyAfterWithdrawCredit(double sum) {
-        return (getMoney() - sum)
+        return (getBalance().getMoney() - sum)
             - (sum
             * getOverdraftFee()
             * getOverdraftFeeDiscount()

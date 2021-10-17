@@ -1,50 +1,52 @@
 import org.junit.Test;
 
+import java.util.Currency;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class CustomerTest {
 
     public static final double OVERDRAFT_FEE_DISCOUNT_COEFFICIENT_PREMIUM_COMPANIES = 0.5;
+    public static final Currency EURO = Currency.getInstance("EUR");
 
     @Test
     public void testWithdrawPersonWithNormalAccount() throws Exception {
         Account account = getAccountByTypeAndMoney(false, 34.0);
         Customer customer = getPersonCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(24.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(24.0));
     }
 
     @Test
     public void testWithdrawPersonWithNormalAccountAndOverdraft() throws Exception {
         Account account = getAccountByTypeAndMoney(false, -10.0);
         Customer customer = getPersonCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(-22.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(-22.0));
     }
 
     @Test
     public void testWithdrawPersonWithPremiumAccount() throws Exception {
         Account account = getAccountByTypeAndMoney(true, 34.0);
         Customer customer = getPersonCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(24.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(24.0));
     }
 
     @Test
     public void testWithdrawPersonWithPremiumAccountAndOverdraft() throws Exception {
         Account account = getAccountByTypeAndMoney(true, -10.0);
         Customer customer = getPersonCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(-21.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(-21.0));
     }
 
     @Test
     public void testWithdrawCompanyWithNormalAccount() throws Exception {
         Account account = getAccountByTypeAndMoney(false, 34);
         Customer customer = getCompanyCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(24.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(24.0));
     }
 
     @Test
@@ -52,16 +54,16 @@ public class CustomerTest {
 
         Account account = getAccountByTypeAndMoney(false, -10);
         Customer customer = getCompanyCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(-21.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(-21.0));
     }
 
     @Test
     public void testWithdrawCompanyWithPremiumAccount() throws Exception {
         Account account = getAccountByTypeAndMoney(true, 34);
         Customer customer = getCompanyCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(24.0));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(24.0));
     }
 
     @Test
@@ -69,8 +71,8 @@ public class CustomerTest {
         Account account = getAccountByTypeAndMoney(true, -10);
         account.setOverdraftFeeDiscountCoefficient(OVERDRAFT_FEE_DISCOUNT_COEFFICIENT_PREMIUM_COMPANIES);
         Customer customer = getCompanyCustomer(account);
-        customer.getAccount().withdraw(10, "EUR");
-        assertThat(account.getMoney(), is(-20.25));
+        customer.getAccount().withdraw(createTenEuro());
+        assertThat(account.getBalance().getMoney(), is(-20.25));
     }
 
     @Test
@@ -106,8 +108,9 @@ public class CustomerTest {
         account.setDaysOverdrawn(9);
         Person person = getPersonCustomer(account);
         account.setIban("RO023INGB434321431241");
-        account.setMoney(34.0);
-        account.setCurrency("EUR");
+        account.setBalance(
+            new Money(EURO, 34.0)
+        );
         return person;
     }
 
@@ -115,8 +118,8 @@ public class CustomerTest {
         Account account = premium ? new PremiumAccount() : new NormalAccount();
         account.setDaysOverdrawn(9);
         account.setIban("RO023INGB434321431241");
-        account.setMoney(money);
-        account.setCurrency("EUR");
+        account.getBalance().setMoney(money);
+        account.getBalance().setCurrency(EURO);
         return account;
     }
 
@@ -131,5 +134,9 @@ public class CustomerTest {
         account.setOverdraftFeeDiscount(0.50);
         account.setCustomer(company);
         return company;
+    }
+
+    private Money createTenEuro() {
+        return new Money(EURO, 10);
     }
 }

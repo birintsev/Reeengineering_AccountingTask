@@ -6,7 +6,7 @@ public class AccountStringUtils {
 
     public static String toIbanMoneyTypeString(Account account) {
         return "Account: IBAN: " + account.getIban()
-            + ", Money: " + account.getMoney()
+            + ", Money: " + account.getBalance().getMoney()
             + ", Account type: " + account.getAccountTypeName();
     }
 
@@ -17,6 +17,6 @@ public class AccountStringUtils {
 
     public static String toIbanMoneyString(Account account) {
         return "Account: IBAN: " + account.getIban()
-            + ", Money: " + account.getMoney();
+            + ", Money: " + account.getBalance().getMoney();
     }
 }
