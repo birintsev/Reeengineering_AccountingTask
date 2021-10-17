@@ -39,6 +39,19 @@ public abstract class Account {
         return result;
     }
 
+    /**
+     * Performs a withdraw bank operation depending on the current balance.
+     * If the balance is positive,
+     * {@link #calculateMoneyAfterWithdraw just the sum is withdrawn},
+     * else {@link #calculateMoneyAfterWithdrawCredit additional fee is kept
+     * from the operation}.
+     *
+     * @param sum      the sum to be withdrawn.
+     * @param currency the currency which should be used in the transaction.
+     *
+     * @see            #calculateMoneyAfterWithdraw
+     * @see            #calculateMoneyAfterWithdrawCredit
+     * */
     public void withdraw(double sum, String currency) {
         if (!getCurrency().equals(currency)) {
             throw new RuntimeException("Can't extract withdraw " + currency);
@@ -50,19 +63,19 @@ public abstract class Account {
         );
     }
 
-    public double calculateMoneyAfterWithdraw(double sum) {
-        return getMoney() - sum;
-    }
-
-    public double calculateMoneyAfterWithdrawCredit(double sum) {
-        return (getMoney() - sum)
-            - (sum
-                * getOverdraftFee()
-                * getOverdraftFeeDiscount()
-                * getOverdraftFeeDiscountCoefficient());
-    }
-
     protected abstract String getAccountTypeName();
 
     protected abstract double overdraftCharge();
+
+    private double calculateMoneyAfterWithdraw(double sum) {
+        return getMoney() - sum;
+    }
+
+    private double calculateMoneyAfterWithdrawCredit(double sum) {
+        return (getMoney() - sum)
+            - (sum
+            * getOverdraftFee()
+            * getOverdraftFeeDiscount()
+            * getOverdraftFeeDiscountCoefficient());
+    }
 }
