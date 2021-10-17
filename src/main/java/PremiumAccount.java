@@ -1,7 +1,7 @@
 import lombok.Getter;
 
 @Getter
-public class PremiumAccount extends AbstractAccount {
+public class PremiumAccount extends Account {
 
     public static final int NO_OVERDRAFT_FEE_DISCOUNT = 1;
 

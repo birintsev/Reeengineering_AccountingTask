@@ -1,42 +1,55 @@
-public interface Account {
+import lombok.Getter;
+import lombok.Setter;
 
-    String getIban();
+@Getter
+@Setter
+public abstract class Account {
 
-    void setIban(String iban);
+    private static double BASE_BANKCHARGE = 4.5;
 
-    double getMoney();
+    private static int DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT = 1; // 1 means 100%
 
-    void setMoney(double sum);
+    private String iban;
 
-    int getDaysOverdrawn();
+    private double money;
 
-    void setDaysOverdrawn(int daysOverdrawn);
+    private int daysOverdrawn;
 
-    double getOverdraftFee();
+    private String currency;
 
-    double getOverdraftFeeDiscount();
+    private Customer customer;
 
-    void setOverdraftFeeDiscount(double overdraftFeeDiscount);
+    private double overdraftFee;
 
-    double getOverdraftFeeDiscountCoefficient();
+    private double overdraftFeeDiscount;
 
-    void setOverdraftFeeDiscountCoefficient(double overdraftFeeDiscountCoefficient);
+    private double overdraftFeeDiscountCoefficient;
 
-    String getCurrency();
+    public Account() {
+        this.overdraftFeeDiscountCoefficient = DEFAULT_OVERDRAFT_FEE_DISCOUNT_COEFFICIENT;
+    }
 
-    void setCurrency(String currency);
+    public static String getIbanDaysOverdrawnString(Account account) {
+        return "Account: IBAN: " + account.getIban() + ", Days Overdrawn: " + account.getDaysOverdrawn();
+    }
 
-    Customer getCustomer();
+    public static String getIbanMoneyString(Account account) {
+        return "Account: IBAN: " + account.getIban() + ", Money: " + account.getMoney();
+    }
 
-    void setCustomer(Customer customer);
+    public double bankcharge() {
+        double result = BASE_BANKCHARGE;
 
-    double bankcharge();
+        result += overdraftCharge();
 
-    String getAccountTypeName();
+        return result;
+    }
 
-    double overdraftCharge();
+    abstract String getAccountTypeName();
 
-    default void withdraw(double sum, String currency) {
+    abstract double overdraftCharge();
+
+    public void withdraw(double sum, String currency) {
         if (!getCurrency().equals(currency)) {
             throw new RuntimeException("Can't extract withdraw " + currency);
         }
@@ -47,15 +60,15 @@ public interface Account {
         );
     }
 
-    default double calculateMoneyAfterWithdraw(double sum) {
+    public double calculateMoneyAfterWithdraw(double sum) {
         return getMoney() - sum;
     }
 
-    default double calculateMoneyAfterWithdrawCredit(double sum) {
+    public double calculateMoneyAfterWithdrawCredit(double sum) {
         return (getMoney() - sum)
             - sum
-                * getOverdraftFee()
-                * getOverdraftFeeDiscount()
-                * getOverdraftFeeDiscountCoefficient();
+            * getOverdraftFee()
+            * getOverdraftFeeDiscount()
+            * getOverdraftFeeDiscountCoefficient();
     }
 }

@@ -1,7 +1,7 @@
 import lombok.Getter;
 
 @Getter
-public class NormalAccount extends AbstractAccount {
+public class NormalAccount extends Account {
 
     private static final String NORMAL_ACCOUNT_TYPE_NAME = "normal";
 

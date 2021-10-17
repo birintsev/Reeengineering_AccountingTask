@@ -13,11 +13,11 @@ public class Person extends Customer {
     }
 
     public String printCustomerDaysOverdrawn() { // TODO: find more relevant class for this method (or make it a static function)
-        return getFullName() + AbstractAccount.getIbanDaysOverdrawnString(getAccount());
+        return getFullName() + Account.getIbanDaysOverdrawnString(getAccount());
     }
 
     public String printCustomerMoney() { // TODO: find more relevant class for this method (or make it a static function)
-        return getFullName() + AbstractAccount.getIbanMoneyString(getAccount());
+        return getFullName() + Account.getIbanMoneyString(getAccount());
     }
 
     private String getFullName() {
