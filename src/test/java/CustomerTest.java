@@ -6,11 +6,14 @@ import static org.junit.Assert.assertThat;
 
 public class CustomerTest {
 
-    public static final double OVERDRAFT_FEE_DISCOUNT_COEFFICIENT_PREMIUM_COMPANIES = 0.5;
-    public static final Currency EURO = Currency.getInstance("EUR");
+    private static final double
+        OVERDRAFT_FEE_DISCOUNT_COEFFICIENT_PREMIUM_COMPANIES = 0.5;
+
+    private static final Currency
+        EURO = Currency.getInstance("EUR");
 
     @Test
-    public void testWithdrawPersonWithNormalAccount() throws Exception {
+    public void testWithdrawPersonWithNormalAccount() {
         Account account = getAccountByTypeAndMoney(false, 34.0);
         Customer customer = getPersonCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
@@ -18,7 +21,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawPersonWithNormalAccountAndOverdraft() throws Exception {
+    public void testWithdrawPersonWithNormalAccountAndOverdraft() {
         Account account = getAccountByTypeAndMoney(false, -10.0);
         Customer customer = getPersonCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
@@ -26,7 +29,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawPersonWithPremiumAccount() throws Exception {
+    public void testWithdrawPersonWithPremiumAccount() {
         Account account = getAccountByTypeAndMoney(true, 34.0);
         Customer customer = getPersonCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
@@ -34,7 +37,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawPersonWithPremiumAccountAndOverdraft() throws Exception {
+    public void testWithdrawPersonWithPremiumAccountAndOverdraft() {
         Account account = getAccountByTypeAndMoney(true, -10.0);
         Customer customer = getPersonCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
@@ -42,7 +45,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawCompanyWithNormalAccount() throws Exception {
+    public void testWithdrawCompanyWithNormalAccount() {
         Account account = getAccountByTypeAndMoney(false, 34);
         Customer customer = getCompanyCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
@@ -50,7 +53,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawCompanyWithNormalAccountAndOverdraft() throws Exception {
+    public void testWithdrawCompanyWithNormalAccountAndOverdraft() {
 
         Account account = getAccountByTypeAndMoney(false, -10);
         Customer customer = getCompanyCustomer(account);
@@ -59,7 +62,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawCompanyWithPremiumAccount() throws Exception {
+    public void testWithdrawCompanyWithPremiumAccount() {
         Account account = getAccountByTypeAndMoney(true, 34);
         Customer customer = getCompanyCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
@@ -67,40 +70,59 @@ public class CustomerTest {
     }
 
     @Test
-    public void testWithdrawCompanyWithPremiumAccountAndOverdraft() throws Exception {
+    public void testWithdrawCompanyWithPremiumAccountAndOverdraft() {
         Account account = getAccountByTypeAndMoney(true, -10);
-        account.setOverdraftFeeDiscountCoefficient(OVERDRAFT_FEE_DISCOUNT_COEFFICIENT_PREMIUM_COMPANIES);
+        account.setOverdraftFeeDiscountCoefficient(
+            OVERDRAFT_FEE_DISCOUNT_COEFFICIENT_PREMIUM_COMPANIES
+        );
         Customer customer = getCompanyCustomer(account);
         customer.getAccount().withdraw(createTenEuro());
         assertThat(account.getBalance().getMoney(), is(-20.25));
     }
 
     @Test
-    public void testPrintCustomerDaysOverdrawn() throws Exception {
+    public void testPrintCustomerDaysOverdrawn() {
         Person person = getPersonWithAccount(false);
-        assertThat(PersonStringUtils
-                       .toFullNameDaysOverdrawnString(person), is("danix dan Account: IBAN: RO023INGB434321431241, Days Overdrawn: 9"));
+        assertThat(
+            PersonStringUtils.toFullNameDaysOverdrawnString(person),
+            is(
+                "danix dan Account: IBAN: RO023INGB434321431241,"
+                    + " Days Overdrawn: 9"
+            )
+        );
     }
 
     @Test
-    public void testPrintCustomerMoney() throws Exception {
+    public void testPrintCustomerMoney() {
         Person person = getPersonWithAccount(false);
-        assertThat(PersonStringUtils
-                       .toPersonFullNameIbanMoneyString(person), is("danix dan Account: IBAN: RO023INGB434321431241, Money: 34.0"));
+        assertThat(
+            PersonStringUtils.toPersonFullNameIbanMoneyString(person),
+            is("danix dan Account: IBAN: RO023INGB434321431241, Money: 34.0")
+        );
     }
 
     @Test
-    public void testPrintCustomerAccountNormal() throws Exception {
+    public void testPrintCustomerAccountNormal() {
         Customer customer = getPersonWithAccount(false);
-        assertThat(AccountStringUtils
-                       .toIbanMoneyTypeString(customer.getAccount()), is("Account: IBAN: RO023INGB434321431241, Money: 34.0, Account type: normal"));
+        assertThat(
+            AccountStringUtils.toIbanMoneyTypeString(customer.getAccount()),
+            is(
+                "Account: IBAN: RO023INGB434321431241, "
+                    + "Money: 34.0, Account type: normal"
+            )
+        );
     }
 
     @Test
-    public void testPrintCustomerAccountPremium() throws Exception {
+    public void testPrintCustomerAccountPremium() {
         Customer customer = getPersonWithAccount(true);
-        assertThat(AccountStringUtils
-                       .toIbanMoneyTypeString(customer.getAccount()), is("Account: IBAN: RO023INGB434321431241, Money: 34.0, Account type: premium"));
+        assertThat(
+            AccountStringUtils.toIbanMoneyTypeString(customer.getAccount()),
+            is(
+                "Account: IBAN: RO023INGB434321431241, "
+                    + "Money: 34.0, Account type: premium"
+            )
+        );
     }
 
     private Person getPersonWithAccount(boolean premium) {
